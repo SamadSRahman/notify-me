@@ -1,0 +1,42 @@
+.container{
+    border: 1px solid #D1D1D1;
+    border-radius: 10px;
+    width: 40rem;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    gap:10px
+}
+.heading{
+    border-bottom: 1px solid #D1D1D1;
+    padding: 10px;
+}
+.body{
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap:10px;
+}
+#editBtn{
+    background-color: #4D3F87;
+    text-transform: none;
+    width: 6rem;
+}
+#saveBtn{
+    background-color: #4D3F87;
+    text-transform: none;
+    width: 6rem;
+}
+#saveBtn:disabled{
+    background-color: #D4D1E2;
+}
+.serviceKeyField{
+    resize: none;
+    width: 100%;
+}
+.errorMessage{
+    color: red;
+}
+#toastMarkup{
+    background-color: green;
+}

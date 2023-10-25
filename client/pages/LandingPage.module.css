@@ -1,0 +1,81 @@
+.container{
+    width:  25rem;
+ height: 25rem;
+background-color: #fff;
+position: relative;
+top: 3rem;
+left: 15rem;
+padding: 56px, 40px, 56px, 40px;
+border-radius: 10px;
+border: 1px solid #D7D7D7;
+gap: 64px;
+}
+
+.bottomHalf{
+    
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+    min-height: 50%;
+    justify-content: center;
+}
+.topHalf{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 50%;
+    gap: 10px;
+}
+.userImg{
+    width: 7rem;
+    border-radius: 50%;
+    background-color: #F5F5F5;
+
+}
+.serverKeyInput{
+    width:  80%;
+height:  2.5rem;
+padding: 18px, 26px, 18px, 26px;
+border-radius: 5px;
+border: 1px solid #CCCCCC;
+gap: 6px;
+
+}
+.serverKeyInput:current{
+    outline: 1px solid #4D3F87;
+    background-color: red;
+}
+#submitBtn{
+background-color: #4D3F87;
+width: 80%;
+text-transform: none;
+margin-top: 10px;
+}
+#submitBtn:disabled{
+background-color: #D4D1E2;
+}
+#greeting{
+    font-family: Sora;
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 53px;
+    letter-spacing: 0em;
+    text-align: left;
+    
+    
+}
+#heading{
+    font-family: Sora;
+font-size: 22px;
+font-weight: 400;
+line-height: 33px;
+letter-spacing: 0em;
+text-align: left;
+
+}
+.css-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input:focus{
+    outline: #4D3F87;
+    border: #4D3F87;
+}

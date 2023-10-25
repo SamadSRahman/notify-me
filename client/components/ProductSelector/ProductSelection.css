@@ -1,0 +1,8 @@
+.productSelectorContainer{
+   width: 100%;
+   display: flex;
+   justify-content: center;
+}
+.css-1h51icj-MuiAutocomplete-root .MuiFilledInput-root.MuiInputBase-sizeSmall .MuiFilledInput-input{
+    font-family: sora;
+}
