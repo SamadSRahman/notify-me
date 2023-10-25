@@ -70,4 +70,4 @@ export default defineConfig({
 // so just 🐻 with me on this, but it's production ready, so don't worry about this
 // On a future date I'll push out a migration guide because the entire structure will change
 // to make the developer experience better.
-// https://github.com/kinngh/create-shop-app
+
