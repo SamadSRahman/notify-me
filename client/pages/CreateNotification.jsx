@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import "./CreateNotification.css";
 import { Button } from "@mui/material";
 import { Frame, Page, Text, Toast } from "@shopify/polaris";
-import  notificationImg from "../public/notify.png";
+import notificationImg from "../public/notify.png";
 import useFetch from "../hooks/useFetch";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { useNavigate } from "raviger";
@@ -17,7 +17,9 @@ import {
   selectedProductAtom,
   selectedProductIdAtom,
   selectedSegmentsAtom,
-  isAlertVisibleAtom
+  isAlertVisibleAtom,
+  segmentsDataAtom,
+  templateAtom,
 } from "../recoilStore/store.js";
 import AlertBanner from "../components/alert/Alert";
 import ErrorBanner from "../components/alert/ErrorBanner";
@@ -26,18 +28,22 @@ export default function CreateNotification() {
   const [isAuthErrorVisible, setIsAuthErrorVisible] = useRecoilState(
     isAuthErrorVisibleAtom
   );
+  const template = useRecoilValue(templateAtom);
   const selectedProductId = useRecoilValue(selectedProductIdAtom);
-  const setSelectedProduct =
-    useSetRecoilState(selectedProductAtom);
+  const setSelectedProduct = useSetRecoilState(selectedProductAtom);
+  // const selectedSegmentsWithId = useRecoilValue(selectedSegmentsWithIdAtom)
   const navigate = useNavigate();
-  const [isAlertVisible, setIsAlertVisible] = useRecoilState(isAlertVisibleAtom);
-  const  setProductStyle = useSetRecoilState(productStyleAtom);
-  const  setSegStyle = useSetRecoilState(segStyleAtom);
+  const [isAlertVisible, setIsAlertVisible] =
+    useRecoilState(isAlertVisibleAtom);
+  const setProductStyle = useSetRecoilState(productStyleAtom);
+  const setSegStyle = useSetRecoilState(segStyleAtom);
   const [titleStyle, setTitleStyle] = useState({});
   const [messageStyle, setMessageStyle] = useState({});
   const [alertMessage, setAlertMessage] = useState({});
   const [message, setMessage] = useState("");
-  const [title, setTitle] = useState(""); 
+  const [title, setTitle] = useState("");
+  const segmentsData = useRecoilValue(segmentsDataAtom);
+
   const [selectedSegments, setSelectedSegments] =
     useRecoilState(selectedSegmentsAtom);
   const [notificationMessage, setNotificationMessage] = useState({
@@ -62,13 +68,13 @@ export default function CreateNotification() {
     const fetch = useFetch();
     const fetchData = async () => {
       setData(["Loading..."]);
-    const result = await (await fetch(url, options)).json();
-    
-    if ("message" in result) {
-      setData(result.message);
-      setLoading(false);
-    }
-  }
+      const result = await (await fetch(url, options)).json();
+
+      if ("message" in result) {
+        setData(result.message);
+        setLoading(false);
+      }
+    };
     return [data, fetchData];
   };
 
@@ -86,6 +92,10 @@ export default function CreateNotification() {
   const [notificationMessagePost, fetchNotificactionMessagePost] =
     useDataFetcher("", "/api/sendNotificatication", postOptions);
 
+  const handleFilteredDataChange = (filteredData) => {
+    // Process the filteredData in the parent component
+    console.log("Filtered Data in Parent Component:", filteredData);
+  };
   useEffect(() => {
     //useEffect to check the response of the post request and display success toast, empty the input fields
     if (notificationMessagePost === "Notification Send Successfylly") {
@@ -100,9 +110,9 @@ export default function CreateNotification() {
       setIsAuthErrorVisible(true);
     window.scroll(0, 0);
   }, [notificationMessagePost]);
+  let result = {};
   const handleSend = () => {
     //form validations to make sure that all the details have been entered
-    console.log(selectedProductId);
     if (!selectedProductId) {
       setAlertMessage("Please select atleast one product");
       setIsAlertVisible(true);
@@ -121,30 +131,37 @@ export default function CreateNotification() {
       setMessageStyle({ border: "1px solid red" });
     } else {
       //Code that would be executed if there are no errors in the input
+      for (let i = 0; i < segmentsData.length; i++) {
+        if (segmentsData[i].name == selectedSegments) {
+          result = { name: segmentsData[i].name, id: segmentsData[i].id };
+        }
+      }
+      console.log(result);
       setNotificationMessage({
         title: title,
         body: message,
-        segments: selectedSegments,
+        segments: result,
       });
     }
   };
-  useEffect(()=>{
-    setMessageStyle({})
-    setIsAlertVisible(false)
-  },[message])
-  useEffect(()=>{
-setTitleStyle({})
-setIsAlertVisible(false)
-  },[title])
+  useEffect(() => {
+    setMessageStyle({});
+    setIsAlertVisible(false);
+  }, [message]);
+  useEffect(() => {
+    setTitleStyle({});
+    setIsAlertVisible(false);
+  }, [title]);
   useEffect(() => {
     //useEffect to make POST request only when all the fields are available
     if (
       notificationMessage.title &&
       notificationMessage.body &&
-      notificationMessage.segments.length > 0
+      notificationMessage.segments
     ) {
       fetchNotificactionMessagePost();
       setLoading(true);
+      console.log(notificationMessage);
       setIsAlertVisible(false);
     }
   }, [notificationMessage]);
@@ -181,8 +198,8 @@ setIsAlertVisible(false)
           </div>
           <div className="body">
             {isAlertVisible && <ErrorBanner alertMessage={alertMessage} />}
-            <ProductSelection />
-            <SegmentSelector />
+            {template==='product notification' && <ProductSelection />}
+            <SegmentSelector onFilteredDataChange={handleFilteredDataChange} />
             <div className="titleSection" style={titleStyle}>
               <label htmlFor="">Title*</label>
               <input

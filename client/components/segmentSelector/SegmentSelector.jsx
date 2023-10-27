@@ -1,38 +1,36 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Autocomplete, TextField } from "@mui/material";
 import {
   segStyleAtom,
-  segmentsAtom,
   selectedSegmentsAtom,
   isAlertVisibleAtom,
+  segmentsDataAtom,
 } from "../../recoilStore/store";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import useFetch from "../../hooks/useFetch";
 import CircularProgress from "@mui/material/CircularProgress";
 
 export default function SegmentSelector() {
-  let segs = [];
-  const [segments, setSegments] = useRecoilState(segmentsAtom);
+  const [segmentsData, setSegmentsData] = useRecoilState(segmentsDataAtom);
   const [selectedSegments, setSelectedSegments] =
     useRecoilState(selectedSegmentsAtom);
   const [segStyle, setSegStyle] = useRecoilState(segStyleAtom);
-  const  setIsAlertVisible = useSetRecoilState(isAlertVisibleAtom);
-
+  const setIsAlertVisible = useSetRecoilState(isAlertVisibleAtom);
   const handleSelect = (event, newValue) => {
     //Automcomplete function to display selected segments as tags
     setSelectedSegments(newValue);
     setSegStyle({});
     setIsAlertVisible;
   };
+
   const useDataFetcher = (initialState, url, options) => {
     const fetch = useFetch();
     const fetchData = async () => {
       const result = await (await fetch(url, options)).json();
       let dataFromApi = result.segments;
-      segs = dataFromApi.map((ele) => ele.name);
-      setSegments(segs);
+      setSegmentsData(dataFromApi);
     };
-    return  fetchData;
+    return fetchData;
   };
   const getSegment = {
     headers: {
@@ -41,13 +39,9 @@ export default function SegmentSelector() {
     },
     method: "GET",
   };
-  const  fetchSegments = useDataFetcher(
-    [], 
-    "/api/getSegment",
-    getSegment
-  );
+  const fetchSegments = useDataFetcher([], "/api/getSegment", getSegment);
   useEffect(() => {
-    if (segments.length === 0) fetchSegments();
+    if (segmentsData.length === 0) fetchSegments();
   }, []);
 
   return (
@@ -55,9 +49,9 @@ export default function SegmentSelector() {
       <Autocomplete
         id="auto"
         onChange={handleSelect}
-        options={segments}
+        options={segmentsData.length==0?["Loading..."]:segmentsData.map((ele) => ele.name)}
         getOptionLabel={(option) => option}
-        multiple
+        // multiple
         value={selectedSegments}
         style={{ width: "90%", marginTop: "-20px", outline: "none" }}
         renderInput={(params) => (
@@ -70,12 +64,12 @@ export default function SegmentSelector() {
               id="segmentsField"
               variant="filled"
               style={segStyle}
-              placeholder={selectedSegments.length > 0 ? "" : "Select Segments"}
+              placeholder={"Select Segments"}
               InputProps={{
                 ...params.InputProps,
                 endAdornment: (
                   <>
-                    {segments.length === 0 ? (
+                    {segmentsData.length === 0 ? (
                       <CircularProgress color="inherit" size={20} />
                     ) : null}
                     {params.InputProps.endAdornment}

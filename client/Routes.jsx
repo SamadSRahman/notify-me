@@ -6,6 +6,7 @@ import GetData from "./pages/debug/Data";
 import ActiveWebhooks from "./pages/debug/Webhooks";
 import CreateNotification from './pages/CreateNotification'
 import SettingsPage from './pages/SettingsPage'
+import Templates from "./pages/Templates";
 // import Segment from "./pages/Index"
 
 const routes = {
@@ -18,7 +19,8 @@ const routes = {
   // "/debug/data": () => <GetData />,
   "/debug/billing": () => <BillingAPI />,
   "/createnotification":()=><CreateNotification/>,
-  '/settings':()=><SettingsPage/>
+  '/settings':()=><SettingsPage/>,
+  '/templates':()=><Templates/>
   //Add your routes here
 };
 

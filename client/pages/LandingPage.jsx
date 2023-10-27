@@ -65,7 +65,7 @@ export default function LandingPage() {
   );
   const handleSubmit = () => {
     fetchServerKeyPost();
-    navigate("/createnotification");
+    navigate("/templates");
   };
 
   useEffect(() => {
@@ -79,7 +79,7 @@ export default function LandingPage() {
     console.log(responseServerKey);
     if (responseServerKey.length === 152) {
       console.log("if condition running", responseServerKey);
-      navigate("/createnotification");
+      navigate("/templates");
     }
   }, [responseServerKey]);
 
