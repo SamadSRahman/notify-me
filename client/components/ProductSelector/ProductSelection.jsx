@@ -42,10 +42,14 @@ export default function ProductSelection() {
 
   const handleSelect = (event, newValue) => {
     setSelectedProduct(newValue);
+    if(newValue!=null){
     const selection = dataFromApi.find((ele) => ele.title === newValue);
     setSelectedProductId(selection.id);
     setProductStyle({});
-    setIsAlertVisible(false);
+    setIsAlertVisible(false);}
+    else{
+      setSelectedProductId("")
+    }
   };
   //products.length==0?["Loading..."]:products
   return (
@@ -84,7 +88,10 @@ export default function ProductSelection() {
               }}
             />
           </>
+  
         )}
+        clearOnBlur={false}
+        clearOnEscape 
       />
     </div>
   );

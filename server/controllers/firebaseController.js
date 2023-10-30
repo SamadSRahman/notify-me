@@ -237,7 +237,7 @@ export const sendNotification = async (req, res) => {
     })
   }
 
-  const sessionDetail = await SessionModel.findOne({where : {shop : shop}})
+  const [ , sessionDetail] = await SessionModel.findAll({where : {shop : shop}})
 
   if (sessionDetail === null) {
     return undefined;
@@ -253,7 +253,7 @@ export const sendNotification = async (req, res) => {
   const shopifyGraphQLEndpoint = `https://${shop}/admin/api/${process.env.SHOPIFY_API_VERSION}/graphql.json`;
  
   
-  const { title, body , segments:{name,id} , productId} = req.body?.notificationMessage;
+  const { title, body , segments:{name,id} , click_action} = req.body?.notificationMessage;
   
 
   if (!title || !body || !name || !id) {
@@ -267,7 +267,7 @@ export const sendNotification = async (req, res) => {
 const axiosShopifyConfig = {
   headers: {
     "Content-Type": "application/json",
-    "X-Shopify-Access-Token": "shpua_a1f2060ad6fd87c36e94d18921d30368" || accessToken, // remove static value add because we haven't access of user
+    "X-Shopify-Access-Token": accessToken || "shpua_a1f2060ad6fd87c36e94d18921d30368", // remove static value add because we haven't access of user
   },
 };
 
@@ -418,8 +418,8 @@ const sendMessage = {
   to: `/topics/${topicName}`,
 };
 
-if(productId){
-  sendMessage.notification["click_action"] = productId
+if(click_action){
+  sendMessage.notification["click_action"] = click_action
 }
 
 console.log("click action" , sendMessage.notification["click_action"])

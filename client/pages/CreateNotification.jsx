@@ -30,12 +30,11 @@ export default function CreateNotification() {
   );
   const template = useRecoilValue(templateAtom);
   const [selectedProductId, setSelectedProductId] = useRecoilState(selectedProductIdAtom);
-  const setSelectedProduct = useSetRecoilState(selectedProductAtom);
-  // const selectedSegmentsWithId = useRecoilValue(selectedSegmentsWithIdAtom)
   const navigate = useNavigate();
   const [isAlertVisible, setIsAlertVisible] =
     useRecoilState(isAlertVisibleAtom);
   const setProductStyle = useSetRecoilState(productStyleAtom);
+  const setSelectedProduct = useSetRecoilState(selectedProductAtom)
   const setSegStyle = useSetRecoilState(segStyleAtom);
   const [titleStyle, setTitleStyle] = useState({});
   const [messageStyle, setMessageStyle] = useState({});
@@ -55,6 +54,10 @@ export default function CreateNotification() {
 
   let click_action = `https://productID?productID=${selectedProductId}`;
 
+  useEffect(()=>{
+    if(template=='')
+    navigate('/templates')
+  },[])
   //Code to display toast with success message
   const [active, setActive] = useState(false);
   const toggleActive = useCallback(() => setActive((active) => !active), []);
@@ -105,6 +108,7 @@ export default function CreateNotification() {
       setMessage("");
       setSelectedSegments("");
       setSelectedProductId("");
+      setSelectedProduct("")
     } else if (
       notificationMessagePost === "Request failed with status code 401"
     )
