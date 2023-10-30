@@ -8,9 +8,13 @@ const cryption = new Cryptr(process.env.ENCRYPTION_STRING);
 
 export const getAllSegment = async (req, res) => {
   try {
+
+    console.log("Enter inside the segment")
     const shop = req.query.shop;
     
-    const sessionDetail = await SessionModel.findOne({where : {shop : shop}})
+    const [ , sessionDetail] = await SessionModel.findAll({where : {shop : shop}})
+
+    console.log(sessionDetail)
      
 
     // const sessionDetail = await SessionModel.findOne({ shop: shop });
@@ -59,7 +63,7 @@ export const getAllSegment = async (req, res) => {
 
     const segments = response?.data?.data?.segments?.edges?.map((edge) => edge.node);
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       segments
     });
@@ -76,7 +80,7 @@ export const getProduct = async (req, res) => {
     console.log("Enter inside the product")
     const shop = req.query.shop;
     
-    const sessionDetail = await SessionModel.findOne({where : {shop : shop}})
+    const [ , sessionDetail] = await SessionModel.findAll({where : {shop : shop}})
      
     // const sessionDetail = await SessionModel.findOne({ shop: shop });
 
@@ -130,7 +134,7 @@ console.log(products)
 
   } catch (error) {
     console.error("Error:", error);
-    res.status(500).json({ success: false, message : error.message });
+   res.status(500).json({ success: false, message : error.message });
   }
 };
 

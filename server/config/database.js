@@ -3,6 +3,7 @@ import {Sequelize} from "sequelize"
 import dotenv from "dotenv";
 dotenv.config();
 
+console.log(process.env.Username)
 
 const sequelize = new Sequelize({
   dialect: 'postgres',
