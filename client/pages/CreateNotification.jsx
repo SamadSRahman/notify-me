@@ -29,7 +29,7 @@ export default function CreateNotification() {
     isAuthErrorVisibleAtom
   );
   const template = useRecoilValue(templateAtom);
-  const selectedProductId = useRecoilValue(selectedProductIdAtom);
+  const [selectedProductId, setSelectedProductId] = useRecoilState(selectedProductIdAtom);
   const setSelectedProduct = useSetRecoilState(selectedProductAtom);
   // const selectedSegmentsWithId = useRecoilValue(selectedSegmentsWithIdAtom)
   const navigate = useNavigate();
@@ -53,7 +53,7 @@ export default function CreateNotification() {
   });
   const [loading, setLoading] = useState(false);
 
-  let click_action = "";
+  let click_action = `https://productID?productID=${selectedProductId}`;
 
   //Code to display toast with success message
   const [active, setActive] = useState(false);
@@ -72,6 +72,7 @@ export default function CreateNotification() {
 
       if ("message" in result) {
         setData(result.message);
+        console.log(result.message)
         setLoading(false);
       }
     };
@@ -102,22 +103,34 @@ export default function CreateNotification() {
       toggleActive();
       setTitle("");
       setMessage("");
-      setSelectedSegments([]);
-      setSelectedProduct("");
+      setSelectedSegments("");
+      setSelectedProductId("");
     } else if (
       notificationMessagePost === "Request failed with status code 401"
     )
       setIsAuthErrorVisible(true);
     window.scroll(0, 0);
   }, [notificationMessagePost]);
+
   let result = {};
+
+  // useEffect(() => {
+  //   click_action = `https://productID?productID=${selectedProductId}`;
+  //   console.log(click_action);
+  // }, [selectedProductId]);
+
   const handleSend = () => {
     //form validations to make sure that all the details have been entered
-    if (!selectedProductId) {
-      setAlertMessage("Please select atleast one product");
-      setIsAlertVisible(true);
-      setProductStyle({ border: "1px solid red", borderRadius: "5px" });
-    } else if (selectedSegments.length < 1) {
+    if(template === "product notification"){
+      console.log(template, selectedProductId)
+      if (!selectedProductId) {
+        setAlertMessage("Please select atleast one product");
+        setIsAlertVisible(true);
+        setProductStyle({ border: "1px solid red", borderRadius: "5px" });
+        return
+      }
+    }
+    if (!selectedSegments) {
       setAlertMessage("Please select atleast one segment");
       setIsAlertVisible(true);
       setSegStyle({ border: "1px solid red", borderRadius: "5px" });
@@ -141,6 +154,7 @@ export default function CreateNotification() {
         title: title,
         body: message,
         segments: result,
+        click_action: click_action,
       });
     }
   };
@@ -166,9 +180,6 @@ export default function CreateNotification() {
     }
   }, [notificationMessage]);
 
-  useEffect(() => {
-    click_action = `https://productID?productID=${selectedProductId}`;
-  }, [selectedProductId]);
   return (
     <Page>
       <Frame>
@@ -198,7 +209,7 @@ export default function CreateNotification() {
           </div>
           <div className="body">
             {isAlertVisible && <ErrorBanner alertMessage={alertMessage} />}
-            {template==='product notification' && <ProductSelection />}
+            {template === "product notification" && <ProductSelection />}
             <SegmentSelector onFilteredDataChange={handleFilteredDataChange} />
             <div className="titleSection" style={titleStyle}>
               <label htmlFor="">Title*</label>
