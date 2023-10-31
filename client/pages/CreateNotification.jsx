@@ -51,8 +51,7 @@ export default function CreateNotification() {
     segments: [],
   });
   const [loading, setLoading] = useState(false);
-
-  let click_action = `https://productID?productID=${selectedProductId}`;
+  let click_action=''
 
   useEffect(()=>{
     if(template=='')
@@ -72,7 +71,6 @@ export default function CreateNotification() {
     const fetchData = async () => {
       setData(["Loading..."]);
       const result = await (await fetch(url, options)).json();
-
       if ("message" in result) {
         setData(result.message);
         console.log(result.message)
@@ -91,7 +89,6 @@ export default function CreateNotification() {
     method: "POST",
     body: JSON.stringify({ notificationMessage: notificationMessage }),
   };
-
   //response received from the useDataFetcher hook when sendNotification API is called
   const [notificationMessagePost, fetchNotificactionMessagePost] =
     useDataFetcher("", "/api/sendNotificatication", postOptions);
@@ -117,11 +114,6 @@ export default function CreateNotification() {
   }, [notificationMessagePost]);
 
   let result = {};
-
-  // useEffect(() => {
-  //   click_action = `https://productID?productID=${selectedProductId}`;
-  //   console.log(click_action);
-  // }, [selectedProductId]);
 
   const handleSend = () => {
     //form validations to make sure that all the details have been entered
@@ -153,6 +145,7 @@ export default function CreateNotification() {
           result = { name: segmentsData[i].name, id: segmentsData[i].id };
         }
       }
+      click_action = `https://productID?productID=${selectedProductId}`;
       console.log(result);
       setNotificationMessage({
         title: title,
@@ -183,7 +176,6 @@ export default function CreateNotification() {
       setIsAlertVisible(false);
     }
   }, [notificationMessage]);
-
   return (
     <Page>
       <Frame>
