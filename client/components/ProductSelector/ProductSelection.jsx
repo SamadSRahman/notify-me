@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import "./ProductSelection.css";
 import { Autocomplete, TextField } from "@mui/material";
 import {

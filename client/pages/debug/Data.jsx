@@ -96,16 +96,4 @@ navigate("/createnotification")
   );
 };
 
-// const DataCard = ({ method, url, data }) => (
-//   <>
-//     <Layout.Section>
-//       <LegacyCard sectioned>
-//         <p>
-//           {method} <code>{url}</code>: {data}
-//         </p>
-//       </LegacyCard>
-//     </Layout.Section>
-//   </>
-// );
-
 export default GetData;
